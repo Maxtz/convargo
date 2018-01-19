@@ -72,6 +72,33 @@ const deliveries = [{
   }
 }];
 
+function step1()
+{
+for(var i=0;i<deliveries.length;i++) 
+{
+     for(var j=0;j<deliveries.length;j++)
+
+     {
+       if(deliveries[i].truckerId==truckers[j].id)
+      {
+       deliveries[i].price=deliveries[i].distance*truckers[j].pricePerKm+deliveries[i].volume*truckers[j].pricePerVolume;
+      }
+     }
+
+}
+}
+
+function step2()
+{
+
+
+}
+
+step1();
+step2();
+console.log(deliveries);
+
+
 //list of actors for payment
 //useful from step 5
 const actors = [{
@@ -145,6 +172,6 @@ const actors = [{
   }]
 }];
 
-console.log(truckers);
-console.log(deliveries);
-console.log(actors);
+//console.log(truckers);
+//console.log(deliveries);
+//console.log(actors);
