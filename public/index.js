@@ -72,7 +72,7 @@ const deliveries = [{
   }
 }];
 
-function step1()
+function calcul_prix()
 {
 for(var i=0;i<deliveries.length;i++) 
 {
@@ -88,14 +88,66 @@ for(var i=0;i<deliveries.length;i++)
 }
 }
 
-function step2()
+function reduction()
+{
+for(var i=0;i<deliveries.length;i++) 
 {
 
+if (deliveries[i].volume>5 && deliveries[i].volume<=10)
+{
+  deliveries[i].price=deliveries[i].price*0.9;
+}
+else if (deliveries[i].volume>10 && deliveries[i].volume<=25)
+{
+  deliveries[i].price=deliveries[i].price*0.7;
+}
+
+else if (deliveries[i].volume>50)
+{
+  deliveries[i].price=deliveries[i].price*0.5;
+}
 
 }
 
-step1();
-step2();
+}
+
+
+
+function commission_done()
+{
+ for(var i=0;i<deliveries.length;i++)
+
+     {
+      console.log(0.15*deliveries[i].price);
+      deliveries[i].commission.insurance=0.15*deliveries[i].price;
+
+      deliveries[i].commission.treasury=Math.floor(deliveries[i].distance/500);
+      deliveries[i].commission.convargo=deliveries[i].price*0.3-deliveries[i].commission.treasury-deliveries[i].commission.insurance;
+
+     }
+
+}
+
+function reduction_franchise()
+{
+  for(var i=0;i<deliveries.length;i++)
+ {
+  if (deliveries[i].deductibleReduction==true) 
+    {deliveries[i].franchise=200;
+      deliveries[i].commission.convargo=deliveries[i].volume;
+      }
+      else
+      {
+        deliveries[i].franchise=1000;
+      }
+
+  }
+}
+
+calcul_prix();
+reduction();
+commission_done();
+reduction_franchise();
 console.log(deliveries);
 
 
