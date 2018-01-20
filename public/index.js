@@ -72,83 +72,6 @@ const deliveries = [{
   }
 }];
 
-function calcul_prix()
-{
-for(var i=0;i<deliveries.length;i++) 
-{
-     for(var j=0;j<deliveries.length;j++)
-
-     {
-       if(deliveries[i].truckerId==truckers[j].id)
-      {
-       deliveries[i].price=deliveries[i].distance*truckers[j].pricePerKm+deliveries[i].volume*truckers[j].pricePerVolume;
-      }
-     }
-
-}
-}
-
-function reduction()
-{
-for(var i=0;i<deliveries.length;i++) 
-{
-
-if (deliveries[i].volume>5 && deliveries[i].volume<=10)
-{
-  deliveries[i].price=deliveries[i].price*0.9;
-}
-else if (deliveries[i].volume>10 && deliveries[i].volume<=25)
-{
-  deliveries[i].price=deliveries[i].price*0.7;
-}
-
-else if (deliveries[i].volume>50)
-{
-  deliveries[i].price=deliveries[i].price*0.5;
-}
-
-}
-
-}
-
-
-
-function commission_done()
-{
- for(var i=0;i<deliveries.length;i++)
-
-     {
-      console.log(0.15*deliveries[i].price);
-      deliveries[i].commission.insurance=0.15*deliveries[i].price;
-
-      deliveries[i].commission.treasury=Math.floor(deliveries[i].distance/500);
-      deliveries[i].commission.convargo=deliveries[i].price*0.3-deliveries[i].commission.treasury-deliveries[i].commission.insurance;
-
-     }
-
-}
-
-function reduction_franchise()
-{
-  for(var i=0;i<deliveries.length;i++)
- {
-  if (deliveries[i].deductibleReduction==true) 
-    {deliveries[i].franchise=200;
-      deliveries[i].commission.convargo=deliveries[i].volume;
-      }
-      else
-      {
-        deliveries[i].franchise=1000;
-      }
-
-  }
-}
-
-calcul_prix();
-reduction();
-commission_done();
-reduction_franchise();
-console.log(deliveries);
 
 
 //list of actors for payment
@@ -227,3 +150,110 @@ const actors = [{
 //console.log(truckers);
 //console.log(deliveries);
 //console.log(actors);
+
+
+function calcul_prix()
+{
+for(var i=0;i<deliveries.length;i++) 
+{
+     for(var j=0;j<truckers.length;j++)
+
+     {
+       if(deliveries[i].truckerId==truckers[j].id)
+      {
+       deliveries[i].price=deliveries[i].distance*truckers[j].pricePerKm+deliveries[i].volume*truckers[j].pricePerVolume;
+      }
+     }
+
+}
+}
+
+function reduction()
+{
+for(var i=0;i<deliveries.length;i++) 
+{
+
+if (deliveries[i].volume>5 && deliveries[i].volume<=10)
+{
+  deliveries[i].price=deliveries[i].price*0.9;
+}
+else if (deliveries[i].volume>10 && deliveries[i].volume<=25)
+{
+  deliveries[i].price=deliveries[i].price*0.7;
+}
+
+else if (deliveries[i].volume>50)
+{
+  deliveries[i].price=deliveries[i].price*0.5;
+}
+
+}
+
+}
+
+
+
+function commission_done()
+{
+ for(var i=0;i<deliveries.length;i++)
+
+     {
+      //console.log(0.15*deliveries[i].price);
+      deliveries[i].commission.insurance=0.15*deliveries[i].price;
+
+      deliveries[i].commission.treasury=Math.floor(deliveries[i].distance/500);
+      deliveries[i].commission.convargo=deliveries[i].price*0.3-deliveries[i].commission.treasury-deliveries[i].commission.insurance;
+
+     }
+
+}
+
+function reduction_franchise()
+{
+  for(var i=0;i<deliveries.length;i++)
+ {
+  if (deliveries[i].deductibleReduction==true) 
+    {deliveries[i].franchise=200;
+      deliveries[i].commission.convargo=deliveries[i].volume;
+      }
+      else
+      {
+        deliveries[i].franchise=1000;
+      }
+
+  }
+}
+
+
+function payment_debit_credit()
+{
+for(var i=0;i<deliveries.length;i++) 
+{
+     for(var j=0;j<actors.length;j++)
+
+     {
+       if(deliveries[i].id==actors[j].deliveryId)
+      {
+       actors[j].payment[0].amount=deliveries[i].price;
+       actors[j].payment[1].amount=deliveries[i].price*0.7;//trucker
+       actors[j].payment[2].amount=deliveries[i].commission.treasury;//treasury
+       actors[j].payment[3].amount=deliveries[i].commission.insurance;//insurance
+       actors[j].payment[4].amount=deliveries[i].commission.convargo;//convargo
+       
+      }
+     }
+
+}
+}
+
+
+
+
+calcul_prix();
+reduction();
+commission_done();
+reduction_franchise();
+payment_debit_credit();
+console.log(deliveries);
+console.log(actors);
+
